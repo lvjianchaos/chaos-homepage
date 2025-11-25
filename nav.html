@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos | 个人导航</title>
+    <style>
+        /* 全局变量：紫色系配色 */
+        :root {
+            --bg-color: #0d0221;
+            /* 深紫色背景 */
+            --text-main: #f3e8ff;
+            /* 浅紫白文字 */
+            --text-sub: #b39ddb;
+            /* 次级文字 */
+            --accent-color: #a855f7;
+            /* 亮紫色强调 */
+            --line-color: rgba(168, 85, 247, 0.4);
+            /* 波浪线颜色 */
+            --card-bg: rgba(20, 10, 40, 0.4);
+            /* 卡片半透明背景 */
+            --hover-glow: 0 0 15px rgba(168, 85, 247, 0.6);
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            overflow: hidden;
+            /* 防止滚动条出现 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 背景波浪组件样式 */
+        a-waves {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            /* 放在最底层 */
+            opacity: 0.6;
+            /* 让背景稍微暗一点，不抢主体风头 */
+            pointer-events: none;
+            /* 让鼠标事件穿透背景层，确保文字可选 */
+        }
+
+        /* 波浪线 SVG 样式 */
+        a-waves svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        a-waves svg path {
+            fill: none;
+            stroke: var(--accent-color);
+            stroke-width: 1px;
+            opacity: 0.5;
+        }
+
+        /* 内容容器 */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem;
+            border-radius: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            /* 毛玻璃效果 */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* 头像样式 */
+        .avatar-wrapper {
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            background-color: #2a1b3d;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.2) rotate(6deg);
+        }
+
+        /* 名字样式 */
+        h1 {
+            margin: 0 0 0.5rem 0;
+            font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 诗句标签样式 */
+        .tagline {
+            margin: 1rem 0 2rem 0;
+            font-family: 'Songti SC', 'SimSun', serif;
+            /* 使用宋体增添古典感 */
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        /* 链接按钮区域 */
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .link-item {
+            text-decoration: none;
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: rgba(168, 85, 247, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .link-item:hover {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: var(--hover-glow);
+            transform: translateY(-2px);
+        }
+
+        /* 简单的 SVG 图标 */
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* 动画 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1.5rem;
+                width: 85%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 背景波浪组件 -->
+    <a-waves>
+        <svg></svg>
+    </a-waves>
+
+    <!-- 主体内容卡片 -->
+    <div class="container">
+        <div class="avatar-wrapper">
+            <img src="https://img-chaos.oss-cn-beijing.aliyuncs.com/8943b60b-095f-4050-bb30-1cbc7da9cc57.png"
+                alt="Chaos" class="avatar">
+        </div>
+
+        <h1>Chaos</h1>
+        <p class="tagline">
+            “人世几回伤往事，<br>山形依旧枕寒流”
+        </p>
+
+        <div class="links">
+            <a href="https://blog.chaos-ljc.top" class="link-item" target="_blank" title="访问我的博客">
+                <!-- Blog Icon -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z" />
+                </svg>
+                Blog
+            </a>
+            <a href="https://github.com/lvjianchaos" class="link-item" target="_blank" title="查看我的 Github">
+                <!-- Github Icon -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+                Github
+            </a>
+            <a href="https://space.bilibili.com/475203421" class="link-item" target="_blank" title="关注我的 Bilibili">
+                <!-- Bilibili Icon (Simplified) -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path
+                        d="M17.813 4.653h.854c1.51.054 2.769.746 3.76 2.092 1.029 1.353 1.574 3.126 1.574 5.378 0 3.399-1.258 5.758-3.723 7.022-1.248.64-2.823.963-4.63.963H8.352c-3.141 0-5.592-1.03-7.143-3.033C.186 15.753-.332 13.92.204 11.58c.287-1.325.968-2.52 1.983-3.535 1.252-1.238 2.94-2.062 4.966-2.455.514-.093 1.042-.15 1.565-.173l1.242-2.34a.97.97 0 01.355-.386c.148-.09.31-.137.473-.137.26 0 .506.108.685.3.179.192.274.453.266.732l-.24 2.05c.814-.047 1.637-.058 2.46-.03l1.815-1.92a.965.965 0 011.37-.052c.387.367.41.975.052 1.37l-1.38 1.282zM6.5 13.5c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5-.672-1.5-1.5-1.5-1.5.672-1.5 1.5zm8 0c0 .828.672 1.5 1.5 1.5s1.5-.672 1.5-1.5-.672-1.5-1.5-1.5-1.5.672-1.5 1.5z" />
+                </svg>
+                Bilibili
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 原始波浪线逻辑 (JIEJOE produce)，已针对新主题进行轻微适配
+        class AWaves extends HTMLElement {
+            connectedCallback() {
+                this.svg = this.querySelector('svg')
+                this.mouse = {
+                    x: 0,
+                    y: 0,
+                    lx: 0,
+                    ly: 0,
+                    sx: 0,
+                    sy: 0,
+                    v: 0,
+                    vs: 0,
+                    a: 0,
+                }
+                this.lines = []
+                this.paths = []
+
+                this.bindEvents()
+                this.setSize()
+                this.setLines()
+
+                requestAnimationFrame(this.tick.bind(this))
+            }
+            bindEvents() {
+                window.addEventListener('resize', () => {
+                    this.setSize()
+                    this.setLines()
+                })
+                // 绑定全局鼠标移动，以产生交互
+                window.addEventListener('mousemove', (e) => {
+                    this.updateMousePosition(e.pageX, e.pageY)
+                })
+                this.addEventListener('touchmove', (e) => {
+                    e.preventDefault()
+                    this.updateMousePosition(e.touches[0].clientX, e.touches[0].clientY)
+                })
+            }
+            setSize() {
+                this.bounding = this.getBoundingClientRect()
+                this.svg.style.width = `${this.bounding.width}px`
+                this.svg.style.height = `${this.bounding.height}px`
+            }
+            setLines() {
+                const { width, height } = this.bounding
+
+                this.lines = []
+                this.paths.forEach((path) => {
+                    path.remove()
+                })
+                this.paths = []
+
+                // 调整间隙以适应大屏幕或视觉风格
+                const xGap = 15 // 稍微增加间隙
+                const yGap = 40
+
+                const oWidth = width + 200
+                const oHeight = height + 30
+
+                const totalLines = Math.ceil(oWidth / xGap)
+                const totalPoints = Math.ceil(oHeight / yGap)
+
+                const xStart = (width - xGap * totalLines) / 2
+                const yStart = (height - yGap * totalPoints) / 2
+
+                for (let i = 0; i <= totalLines; i++) {
+                    const points = []
+                    for (let j = 0; j <= totalPoints; j++) {
+                        const point = {
+                            x: xStart + xGap * i,
+                            y: yStart + yGap * j,
+                            cursor: { x: 0, y: 0, vx: 0, vy: 0 },
+                        }
+                        points.push(point)
+                    }
+                    this.lines.push(points)
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+                    this.svg.appendChild(path)
+                    this.paths.push(path)
+                }
+            }
+            updateMousePosition(x, y) {
+                const { mouse } = this
+                mouse.x = x - this.bounding.left
+                mouse.y = y - this.bounding.top + window.scrollY
+            }
+            movePoints(time) {
+                const { lines, mouse } = this
+
+                lines.forEach((points) => {
+                    points.forEach((p, i) => {
+                        const dx = p.x - mouse.sx
+                        const dy = p.y - mouse.sy
+                        const d = Math.hypot(dx, dy)
+                        const l = Math.max(175, mouse.vs)
+
+                        if (d < l) {
+                            const f = 1 - d / l
+                            p.cursor.vx += Math.cos(mouse.a) * f * mouse.vs * 0.08
+                            p.cursor.vy += Math.sin(mouse.a) * f * mouse.vs * 0.08
+                        }
+
+                        p.cursor.vx += (0 - p.cursor.x) * 0.005
+                        p.cursor.vy += (0 - p.cursor.y) * 0.005
+
+                        p.cursor.vx *= 0.925
+                        p.cursor.vy *= 0.925
+
+                        p.cursor.x += p.cursor.vx * 2
+                        p.cursor.y += p.cursor.vy * 2
+
+                        p.cursor.x = Math.min(100, Math.max(-100, p.cursor.x))
+                        p.cursor.y = Math.min(100, Math.max(-100, p.cursor.y))
+                    })
+                })
+            }
+            moved(point, withCursorForce = true) {
+                const coords = {
+                    x: point.x + (withCursorForce ? point.cursor.x : 0),
+                    y: point.y + (withCursorForce ? point.cursor.y : 0),
+                }
+
+                coords.x = Math.round(coords.x * 10) / 10
+                coords.y = Math.round(coords.y * 10) / 10
+
+                return coords
+            }
+            drawLines() {
+                const { lines, moved, paths } = this
+
+                lines.forEach((points, lIndex) => {
+                    let p1 = moved(points[0], false)
+                    let d = `M ${p1.x} ${p1.y}`
+
+                    points.forEach((p, pIndex) => {
+                        const isLast = pIndex === points.length - 1
+                        p = moved(p, !isLast)
+                        d += `L ${p.x} ${p.y}`
+                    })
+
+                    paths[lIndex].setAttribute('d', d)
+                })
+            }
+            tick(time) {
+                const { mouse } = this
+
+                mouse.sx += (mouse.x - mouse.sx) * 0.1
+                mouse.sy += (mouse.y - mouse.sy) * 0.1
+
+                const dx = mouse.x - mouse.lx
+                const dy = mouse.y - mouse.ly
+                const d = Math.hypot(dx, dy)
+
+                mouse.v = d
+                mouse.vs += (d - mouse.vs) * 0.1
+                mouse.vs = Math.min(100, mouse.vs)
+
+                mouse.lx = mouse.x
+                mouse.ly = mouse.y
+
+                mouse.a = Math.atan2(dy, dx)
+
+                this.movePoints(time)
+                this.drawLines()
+
+                requestAnimationFrame(this.tick.bind(this))
+            }
+        }
+
+        customElements.define('a-waves', AWaves)
+    </script>
+</body>
+
+</html>
