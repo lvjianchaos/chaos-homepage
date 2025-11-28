@@ -1,0 +1,210 @@
+/* 全局变量：紫色系配色 */
+:root {
+  --bg-color: #0d0221;
+  /* 深紫色背景 */
+  --text-main: #f3e8ff;
+  /* 浅紫白文字 */
+  --text-sub: #b39ddb;
+  /* 次级文字 */
+  --accent-color: #a855f7;
+  /* 亮紫色强调 */
+  --line-color: rgba(168, 85, 247, 0.4);
+  /* 波浪线颜色 */
+  --card-bg: rgba(20, 10, 40, 0.4);
+  /* 卡片半透明背景 */
+  --hover-glow: 0 0 15px rgba(168, 85, 247, 0.6);
+}
+
+body {
+  background: --bg-color;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  overflow: hidden;
+  /* 防止滚动条出现 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a-waves {
+  --x: -0.5rem;
+  --y: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  /* 放在最底层 */
+  opacity: 0.6;
+  /* 让背景稍微暗一点，不抢主体风头 */
+  pointer-events: none;
+  /* 让鼠标事件穿透背景层，确保文字可选 */
+}
+
+a-waves:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgba(168, 85, 247, 0.4);
+  border-radius: 50%;
+  transform: translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0);
+  will-change: transform;
+  content: "";
+}
+
+a-waves svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+a-waves svg path {
+  fill: none;
+  stroke: rgba(168, 85, 247, 0.4);
+  stroke-width: 1px;
+}
+
+/* 内容容器 */
+.container {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 3rem;
+  border-radius: 20px;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  /* 毛玻璃效果 */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  width: 90%;
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* 头像样式 */
+.avatar-wrapper {
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  background-color: #2a1b3d;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.2) rotate(6deg);
+}
+
+/* 打招呼样式 */
+h1 {
+  margin: 0 0 0.5rem 0;
+  font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(to right, #fff, #d8b4fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 名字样式 */
+#name {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+
+/* 诗句标签样式 */
+.tagline {
+  margin: 1rem 0 2rem 0;
+  font-family: 'Songti SC', 'SimSun', serif;
+  /* 使用宋体增添古典感 */
+  font-size: 1.1rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* 链接按钮区域 */
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.link-item {
+  text-decoration: none;
+  color: var(--text-main);
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: rgba(168, 85, 247, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.link-item:hover {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: var(--hover-glow);
+  transform: translateY(-2px);
+}
+
+/* 简单的 SVG 图标 */
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 600px) {
+  .container {
+    padding: 2rem 1.5rem;
+    width: 80%
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .links {
+    gap: 1rem;
+  }
+}
